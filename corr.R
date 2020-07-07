@@ -5,14 +5,15 @@ corr <- function(directory, threshold = 0) {
   mydata <-lapply(path,read.csv)
   comp <- complete.cases(data.matrix(unlist(mydata)))
   # comp1 <- comp[(sum(comp)>threshold)]
-  comp <- numeric()
-  for(s in mydata) {
-    comp[s$ID] <- sum(complete.cases(data.matrix(s)))
-  }
-  corel <- numeric()
-  for(s in mydata) {
-    corel[s$ID] <- cor(data.matrix(s[-1,]$nitrate),data.matrix(s[-1,]$sulfate),use="pairwise.complete.obs",method="pearson")
-  }
+  comp <- sapply(mydata,function(x) {sum(complete.cases(x))})
+  corel <- sapply(mydata,function(s) {cor(data.matrix(s[-1,]$nitrate),data.matrix(s[-1,]$sulfate),use="pairwise.complete.obs",method="pearson")})
+  #for(s in mydata) {
+   # comp[s$ID] <- sum(complete.cases(data.matrix(s)))
+  #}
+  #corel <- numeric()
+  #for(s in mydata) {
+   # corel[s$ID] <- cor(data.matrix(s[-1,]$nitrate),data.matrix(s[-1,]$sulfate),use="pairwise.complete.obs",method="pearson")
+  #}
   corel[(comp>threshold)]
 
 }
